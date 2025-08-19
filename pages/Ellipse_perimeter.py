@@ -12,12 +12,11 @@ col1, col2 = st.columns([3, 1])
 
 with col2:
     st.image(
-        "https://upload.wikimedia.org/wikipedia/commons/3/3e/Ellipse_-_with_notations.svg",
-        caption="Ellipse with axes a and b"
+        "https://www.mathsisfun.com/geometry/images/ellipse-axes.svg",
     )
 
 with col1:
-    st.title("🟢 Ellipse Perimeter Calculator")
+    st.title("⬭ Ellipse Perimeter Calculator")
 
     # ----------------- Inputs -----------------
     st.markdown("### ✏️ Enter Ellipse Dimensions")
