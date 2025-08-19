@@ -1,7 +1,0 @@
-streamlit
-math
-pandas 
-matplotlib
-numpy
-scipy
-
