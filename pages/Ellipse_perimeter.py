@@ -76,42 +76,43 @@ with st.expander("📖 Show Explanation"):
     ### Approximation 1  
     This approximation is within about 5% of the true value, so long as a is not more than 3 times longer than b (in other words, the ellipse is not too "squashed")  
     """)
-    st.image("images/Approx1.png", use_container_width=True)
+    st.image("images/Approx1.png", use_container_width=500)
 
     # ---------------- Approximation 2 ----------------
     st.markdown(r"""
     ### Approximation 2  
     The famous Indian mathematician **Ramanujan** came up with this better approximation:  
     """)
-    st.image("images/Approx2.png", use_container_width=True)
+    st.image("images/Approx2.png", use_container_width=500)
 
     # ---------------- Approximation 3 ----------------
     st.markdown(r"""
     ### Approximation 3  
     Ramanujan also gave this one. First calculate:  
     """)
-    st.image("images/Approx3h.png", use_container_width=True)
+    st.image("images/Approx3h.png", use_container_width=500)
     st.markdown("Then use:")
-    st.image("images/Approx3.png", use_container_width=True)
+    st.image("images/Approx3.png", use_container_width=500)
 
     # ---------------- Final Approximation ----------------
     st.markdown(r"""
     ### Final Approximation  
     Ramanujan’s “mysterious” formula:  
     """)
-    st.image("images/Approxfinal.png", use_container_width=True)
+    st.image("images/Approxfinal.png", use_container_width=500)
     st.markdown(r"""
     where  
     """)
-    st.image("images/Approxfinal1.png", use_container_width=True)
+    st.image("images/Approxfinal1.png", use_container_width=500)
 
     # ---------------- Highly-accurate (Integral) ----------------
     st.markdown(r"""
     ### Highly-accurate perimeter  
     There is a perfect formula using an integral:
     """)
-    st.image("images/Highaccurate.png", use_container_width=True)
+    st.image("images/Highaccurate.png", use_container_width=500)
     st.markdown(r"""
     Note : e is the "eccentricity" not Euler's number "e" 
     """)
-    st.image("images/Eccentricity.png", use_container_width=True)
+    st.image("images/Eccentricity.png", use_container_width=500)
+
