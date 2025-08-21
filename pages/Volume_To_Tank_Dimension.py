@@ -49,7 +49,7 @@ if "inputs" not in st.session_state:
 st.title("🛢️ Tank L/D Ratio Calculator")
 
 # Input fields (managed via session state)
-volume = st.text_input("Enter operating tank volume (m³):", value=st.session_state.inputs.get["volume"])
+volume = st.text_input("Enter operating tank volume (m³):", value=st.session_state.inputs["volume"])
 min_ratio = st.text_input("Enter minimum L/D ratio [default 1.25]:", value=st.session_state.inputs["min_ratio"])
 max_ratio = st.text_input("Enter maximum L/D ratio [default 2.0]:", value=st.session_state.inputs["max_ratio"])
 margin_input = st.text_input("Enter volume margin to add (%) [blank for none]:", value=st.session_state.inputs["margin_input"])
@@ -126,5 +126,6 @@ if st.session_state.history:
     # Download option
     #csv = hist_df.to_csv(index=False).encode('utf-8')
     #st.download_button("⬇️ Download History as CSV", data=csv, file_name="tank_history.csv", mime="text/csv")
+
 
 
