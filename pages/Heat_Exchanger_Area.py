@@ -23,29 +23,34 @@ st.set_page_config(page_title="Tube Heat Transfer Area Calculator", layout="wide
 
 st.title("🔧 Tube Heat Transfer Area Calculator")
 
-# Initialize history
-if "history" not in st.session_state:
-    st.session_state.history = []
+# -------------------- Session State --------------------
+if "heat_exchanger_area_history" not in st.session_state:
+    st.session_state.heat_exchanger_area_history = []   # quick list history
 
-# Input fields (blank by default)
+if "heat_exchanger_area_detailed_history" not in st.session_state:
+    st.session_state.heat_exchanger_area_detailed_history = []   # detailed history with inputs
+
+# -------------------- Inputs --------------------
 col1, col2, col3 = st.columns(3)
 with col1:
-    tube_dia_mm = st.text_input("Tube Diameter (mm)", value="")
+    tube_dia_mm = st.text_input("Tube Diameter (mm)", value="", key="tube_dia_input")
 with col2:
-    tube_length_m = st.text_input("Tube Length (m)", value="")
+    tube_length_m = st.text_input("Tube Length (m)", value="", key="tube_length_input")
 with col3:
-    no_of_tubes = st.text_input("Number of Tubes", value="")
+    no_of_tubes = st.text_input("Number of Tubes", value="", key="tube_count_input")
 
 # Action buttons
-colA, colB, colC = st.columns([1,1,2])
+colA, colB = st.columns([1,1])
 with colA:
-    calculate_btn = st.button("Calculate")
+    calculate_btn = st.button("🔢 Calculate Heat Exchanger Area")
 with colB:
-    reset_btn = st.button("Reset Inputs")
+    reset_btn = st.button("♻️ Reset Inputs")
 
 # -------------------- Reset functionality --------------------
 if reset_btn:
-    st.experimental_rerun()  # clears inputs, but keeps history
+    st.session_state.tube_dia_input = ""
+    st.session_state.tube_length_input = ""
+    st.session_state.tube_count_input = ""
 
 # -------------------- Calculation --------------------
 if calculate_btn:
@@ -57,6 +62,7 @@ if calculate_btn:
             tube_length_m = float(tube_length_m)
             no_of_tubes = int(no_of_tubes)
 
+            # Formula: π * d * L * N / 1000 (to convert mm·m → m²)
             result = (math.pi * tube_dia_mm * tube_length_m * no_of_tubes) / 1000
 
             st.success(
@@ -64,28 +70,26 @@ if calculate_btn:
                 + random.choice(humor_success)
             )
 
-            # Save in history
-            st.session_state.history.append({
+            # Save in detailed history
+            st.session_state.heat_exchanger_area_detailed_history.append({
                 "Tube Diameter (mm)": tube_dia_mm,
                 "Tube Length (m)": tube_length_m,
                 "No. of Tubes": no_of_tubes,
                 "Heat Transfer Area (m²)": round(result, 3)
             })
 
+            # Save in quick history
+            st.session_state.heat_exchanger_area_history.append(round(result, 3))
+
         except ValueError:
             st.error("⚠️ Please enter valid numbers only!")
 
-# -------------------- History Table --------------------
-if st.session_state.history:
-    st.subheader("📜 Calculation History")
-    df = pd.DataFrame(st.session_state.history)
+# -------------------- Histories --------------------
+if st.session_state.heat_exchanger_area_detailed_history:
+    st.subheader("📜 Detailed Heat Exchanger Area History")
+    df = pd.DataFrame(st.session_state.heat_exchanger_area_detailed_history)
     st.dataframe(df, use_container_width=True)
 
-    # Download button
-    #csv = df.to_csv(index=False).encode("utf-8")
-    #st.download_button(
-    #    "📥 Download History as CSV",
-    #    data=csv,
-    #    file_name="tube_heat_transfer_history.csv",
-    #    mime="text/csv"
-    #)
+if st.session_state.heat_exchanger_area_history:
+    st.subheader("📜 Quick Heat Exchanger Area History")
+    st.write(st.session_state.heat_exchanger_area_history)
