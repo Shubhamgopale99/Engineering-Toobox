@@ -29,7 +29,7 @@ st.markdown(
 ---
 ### 🧭 How to use:
 - Use the **sidebar** to navigate between tools.
-- Each page provides a simple interface for inputting your data and getting instant results.
+- Each tools provides a simple interface for inputting your data and getting instant results.
 - Links above will take you directly to the respective tool.
 
 --- 
@@ -84,4 +84,5 @@ if submit:
         else:
             st.error(f"❌ Failed to send message. Error code: {response.status_code}")
     else:
+
         st.warning("⚠️ Please fill in all fields before sending.")
