@@ -33,12 +33,12 @@ def calculate_dimensions(volume, min_ratio, max_ratio):
         })
     return results
 
-# -------------------- Session state --------------------
-if "history" not in st.session_state:
-    st.session_state.history = []
+# -------------------- Session state (Page-specific) --------------------
+if "tank_history" not in st.session_state:
+    st.session_state.tank_history = []
 
-if "inputs" not in st.session_state:
-    st.session_state.inputs = {
+if "inputs_tank" not in st.session_state:
+    st.session_state.inputs_tank = {
         "volume": "",
         "min_ratio": "",
         "max_ratio": "",
@@ -49,29 +49,34 @@ if "inputs" not in st.session_state:
 st.title("🛢️ Tank L/D Ratio Calculator")
 
 # Input fields (managed via session state)
-volume = st.text_input("Enter operating tank volume (m³):", value=st.session_state.inputs["volume"])
-min_ratio = st.text_input("Enter minimum L/D ratio [default 1.25]:", value=st.session_state.inputs["min_ratio"])
-max_ratio = st.text_input("Enter maximum L/D ratio [default 2.0]:", value=st.session_state.inputs["max_ratio"])
-margin_input = st.text_input("Enter volume margin to add (%) [blank for none]:", value=st.session_state.inputs["margin_input"])
+volume = st.text_input("Enter operating tank volume (m³):", value=st.session_state.inputs_tank["volume"])
+min_ratio = st.text_input("Enter minimum L/D ratio [default 1.25]:", value=st.session_state.inputs_tank["min_ratio"])
+max_ratio = st.text_input("Enter maximum L/D ratio [default 2.0]:", value=st.session_state.inputs_tank["max_ratio"])
+margin_input = st.text_input("Enter volume margin to add (%) [blank for none]:", value=st.session_state.inputs_tank["margin_input"])
 
 # Action buttons
-col1, col2 = st.columns([1,1])
+col1, col2, col3 = st.columns([1,1,1])
 with col1:
     calc_btn = st.button("🔢 Calculate")
 with col2:
     reset_btn = st.button("♻️ Reset Inputs")
+#with col3:
+ #   clear_history_btn = st.button("🗑️ Clear History")
 
 # Reset logic (only inputs)
 if reset_btn:
-    st.session_state.inputs = {
+    st.session_state.inputs_tank = {
         "volume": "",
         "min_ratio": "",
         "max_ratio": "",
         "margin_input": ""
     }
-    st.experimental_rerun()
 
-# Calculation logic
+# Clear history logic
+#if clear_history_btn:
+ #   st.session_state.tank_history = []
+
+# -------------------- Calculation logic --------------------
 if calc_btn:
     try:
         # Convert inputs
@@ -81,7 +86,7 @@ if calc_btn:
         margin_percent = float(margin_input) if margin_input else None
 
         # Save inputs back into session_state
-        st.session_state.inputs = {
+        st.session_state.inputs_tank = {
             "volume": volume,
             "min_ratio": min_ratio,
             "max_ratio": max_ratio,
@@ -91,25 +96,21 @@ if calc_btn:
         # Operating volume results
         op_results = calculate_dimensions(volume_val, min_val, max_val)
         df_op = pd.DataFrame(op_results)
+        df_op["Volume (m³)"] = round(volume_val, 3)
+        df_op["Type"] = "Operating"
         st.subheader("Operating Volume Results")
         st.write(df_op)
-
-        # Append to history
-        for r in op_results:
-            r.update({"Volume (m³)": round(volume_val, 3), "Type": "Operating"})
-            st.session_state.history.append(r)
+        st.session_state.tank_history.append(df_op)
 
         # Gross volume results
         if margin_percent is not None:
             gross_volume = volume_val * (1 + margin_percent / 100)
-            gross_results = calculate_dimensions(gross_volume, min_val, max_val)
-            df_gross = pd.DataFrame(gross_results)
+            df_gross = pd.DataFrame(calculate_dimensions(gross_volume, min_val, max_val))
+            df_gross["Volume (m³)"] = round(gross_volume, 3)
+            df_gross["Type"] = "Gross"
             st.subheader(f"Gross Volume Results (+{margin_percent}%)")
             st.write(df_gross)
-
-            for r in gross_results:
-                r.update({"Volume (m³)": round(gross_volume, 3), "Type": "Gross"})
-                st.session_state.history.append(r)
+            st.session_state.tank_history.append(df_gross)
 
         # Random success humor
         st.success(random.choice(success_jokes))
@@ -118,14 +119,11 @@ if calc_btn:
         st.error(random.choice(error_jokes))
 
 # -------------------- History --------------------
-if st.session_state.history:
+if st.session_state.tank_history:
     st.subheader("📜 Calculation History")
-    hist_df = pd.DataFrame(st.session_state.history)
+    hist_df = pd.concat(st.session_state.tank_history, ignore_index=True)
     st.dataframe(hist_df, use_container_width=True)
 
-    # Download option
-    #csv = hist_df.to_csv(index=False).encode('utf-8')
-    #st.download_button("⬇️ Download History as CSV", data=csv, file_name="tank_history.csv", mime="text/csv")
-
-
-
+    # Optional download
+    # csv = hist_df.to_csv(index=False).encode('utf-8')
+    # st.download_button("⬇️ Download History as CSV", data=csv, file_name="tank_history.csv", mime="text/csv")
