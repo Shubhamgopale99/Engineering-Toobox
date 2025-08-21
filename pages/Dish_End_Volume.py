@@ -87,7 +87,6 @@ with col2:
 # Reset (only clears inputs, keeps history)
 if reset_btn:
     st.session_state.inputs = {"tank_id": "", "sf": "", "dish_thk": ""}
-    st.experimental_rerun()
 
 # Calculation
 if calc_btn:
