@@ -1,5 +1,6 @@
 import streamlit as st
 import math
+import pandas as pd
 
 # Streamlit app configuration
 st.set_page_config(page_title="Limpet Coil Calculator", layout="centered")
@@ -16,11 +17,14 @@ with col_left:
 with col_right:
     st.image("images/Circle_arc.svg", use_container_width=True)
 
-# Initialize session state for history
-if "history" not in st.session_state:
-    st.session_state.history = []
+# ---------------- Session State ----------------
+if "limpet_coil_history" not in st.session_state:
+    st.session_state.limpet_coil_history = []   # quick list (Heat Transfer Area only)
 
-# Function to reset inputs
+if "limpet_coil_detailed_history" not in st.session_state:
+    st.session_state.limpet_coil_detailed_history = []   # detailed history with inputs
+
+# ---------------- Reset Function ----------------
 def reset_inputs():
     st.session_state.shell_id = None
     st.session_state.shell_height = None
@@ -31,7 +35,7 @@ def reset_inputs():
     st.session_state.coil_coverage = None
     st.session_state.density = None
 
-# User inputs (blank default)
+# ---------------- Inputs ----------------
 shell_id = st.number_input("1️⃣ Shell ID (mm)", value=st.session_state.get("shell_id", None), step=1.0, key="shell_id")
 shell_height = st.number_input("2️⃣ Shell Height (mm)", value=st.session_state.get("shell_height", None), step=1.0, key="shell_height")
 shell_thk = st.number_input("3️⃣ Shell Thickness (mm)", value=st.session_state.get("shell_thk", None), step=0.1, key="shell_thk")
@@ -42,39 +46,32 @@ coil_coverage = st.number_input("7️⃣ Limpet Coil Coverage (%)", value=st.ses
 density = st.number_input("8️⃣ Density of Material (kg/m³)", value=st.session_state.get("density", None), step=0.1, key="density")
 
 col1, col2 = st.columns(2)
-
 with col1:
     calculate = st.button("💡 Calculate")
 with col2:
     reset = st.button("🔄 Reset", on_click=reset_inputs)
 
+# ---------------- Calculation ----------------
 if calculate:
     try:
         # --- Limpet Coil Length & Weight ---
-        # Single Turn Limpet Coil Length (m)
-        single_turn_length = (((shell_id + shell_thk*2) + (2*limpet_thk)) * math.pi) * 10**-3
+        single_turn_length = (((shell_id + shell_thk*2) + (2*limpet_thk)) * math.pi) * 10**-3  # m
 
-        # Number of turns
         no_of_turns = (shell_height * (coil_coverage / 100)) / limpet_pitch
 
-        # Total Coil Length (m)
         total_length = single_turn_length * no_of_turns
 
-        # Limpet Weight (kg)
         limpet_weight = (
             ((shell_id + shell_thk*2) + (2*limpet_thk)) * math.pi *
             (math.pi * limpet_od * 1.04 / 2)
-        ) * (limpet_thk * density) * 10**-9
+        ) * (limpet_thk * density) * 10**-9  # kg
 
-        # Total Limpet Weight (kg)
-        Total_limpet_weight = (limpet_weight * no_of_turns)
+        Total_limpet_weight = limpet_weight * no_of_turns
 
-        # --- Heat Transfer Area ---
-        # Using vessel diameter instead of coil diameter for circumference
-        total_length_m = math.pi * shell_id * no_of_turns / 1000  # in meters
-        heat_transfer_area = math.pi * (limpet_od / 1000) * total_length_m  # in m²
+        total_length_m = math.pi * shell_id * no_of_turns / 1000  # m
+        heat_transfer_area = math.pi * (limpet_od / 1000) * total_length_m  # m²
 
-        # Save to history
+        # Save results
         result = {
             "Shell ID (mm)": shell_id,
             "Shell Height (mm)": shell_height,
@@ -85,7 +82,8 @@ if calculate:
             "Total Limpet Weight (kg)": round(Total_limpet_weight, 3),
             "Heat Transfer Area (m²)": round(heat_transfer_area, 3)
         }
-        st.session_state.history.append(result)
+        st.session_state.limpet_coil_detailed_history.append(result)
+        st.session_state.limpet_coil_history.append(round(heat_transfer_area, 3))
 
         # Display results
         st.success("✅ Calculations Completed!")
@@ -104,8 +102,13 @@ if calculate:
     except ZeroDivisionError:
         st.error("Oops! Your limpet pitch is zero. Even in engineering, dividing by zero is bad math 😅")
 
-# Show calculation history
-if st.session_state.history:
+# ---------------- Histories ----------------
+if st.session_state.limpet_coil_detailed_history:
     st.markdown("---")
-    st.subheader("📜 Previous Calculations")
-    st.dataframe(st.session_state.history)
+    st.subheader("📜 Detailed Limpet Coil Calculation History")
+    df = pd.DataFrame(st.session_state.limpet_coil_detailed_history)
+    st.dataframe(df, use_container_width=True)
+
+if st.session_state.limpet_coil_history:
+    st.subheader("📜 Quick Heat Transfer Area History")
+    st.write(st.session_state.limpet_coil_history)
