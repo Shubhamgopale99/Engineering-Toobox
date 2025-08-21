@@ -56,7 +56,6 @@ with col2:
 # Reset inputs only
 if reset_btn:
     st.session_state.inputs = {"diameter": "", "angle": ""}
-    st.experimental_rerun()
 
 # ---------------- Calculation ----------------
 if calc_btn:
@@ -97,3 +96,4 @@ if st.session_state.history:
     # CSV download
    # csv = hist_df.to_csv(index=False).encode("utf-8")
    # st.download_button("⬇️ Download History as CSV", data=csv, file_name="rf_pad_arc_history.csv", mime="text/csv")
+
