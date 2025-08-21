@@ -22,7 +22,6 @@ funny_fail = [
 # ---------------- Helpers ----------------
 def calculate(inputs):
     try:
-        # Only extract numeric fields
         t = inputs["t"]
         Ca = inputs["Ca"]
         mill_tol = inputs["mill_tol"]
@@ -55,7 +54,6 @@ def calculate(inputs):
             "MAWP corroded (MPa)": round(MAWP, 3),
             "status": f"{t:.3f} → {'✅ OK' if t >= t_total_req else '❌ IS NOT ENOUGH!'}"
         }
-
         return None, result
     except Exception as e:
         return f"❌ Error: {e}", None
@@ -64,9 +62,9 @@ def calculate(inputs):
 # ---------------- Streamlit UI ----------------
 st.title("🛢️ ASME UG-27 Shell Thickness Calculator")
 
-# Initialize session history
-if "history" not in st.session_state:
-    st.session_state.history = []
+# Independent history for this page
+if "ug27_history" not in st.session_state:
+    st.session_state.ug27_history = []
 
 # Reset inputs function
 def reset_inputs():
@@ -103,7 +101,6 @@ if submitted:
     if any(x == "" for x in [P, T, mat, rho, S, Do, L, t, Ca, mill_tol, E]):
         st.error(random.choice(funny_fail))
     else:
-        # Only pass numeric fields to calculate()
         calc_inputs = {
             "P": float(P),
             "S": float(S),
@@ -122,21 +119,17 @@ if submitted:
             st.write("### 📊 Results")
             st.json(result)
 
-            # Save to history (keep all fields for history)
+            # Save to independent history
             row = {
                 "P": float(P), "T": float(T), "Material": mat, "rho": float(rho),
                 "S": float(S), "Do": float(Do), "L": float(L), "t": float(t),
                 "Ca": float(Ca), "mill_tol": float(mill_tol), "E": float(E),
                 **result
             }
-            st.session_state.history.append(row)
+            st.session_state.ug27_history.append(row)
 
 # Show History
-if st.session_state.history:
+if st.session_state.ug27_history:
     st.write("### 📜 History (until tab close)")
-    df = pd.DataFrame(st.session_state.history)
+    df = pd.DataFrame(st.session_state.ug27_history)
     st.dataframe(df)
-
-    # Download button
-    #csv = df.to_csv(index=False).encode("utf-8")
-    #st.download_button("⬇️ Download History as CSV", csv, "ug27_history.csv", "text/csv")
