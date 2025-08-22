@@ -1,6 +1,47 @@
 import streamlit as st
 import requests
 
+# --- Add to Home Screen Button for Android Chrome Users ---
+st.markdown(
+    """
+    <script>
+    // Only show for Android Chrome
+    function isAndroidChrome() {
+        return /Android/i.test(navigator.userAgent) && /Chrome/i.test(navigator.userAgent);
+    }
+    // Check if user already dismissed
+    function shouldShowA2HS() {
+        return isAndroidChrome() && !localStorage.getItem('a2hs_dismissed');
+    }
+    window.addEventListener('DOMContentLoaded', function() {
+        if (shouldShowA2HS()) {
+            document.getElementById('a2hs-btn').style.display = 'block';
+        }
+    });
+    function addToHomeScreen() {
+        alert('To add this app to your home screen, tap the browser menu (⋮) and select "Add to Home screen".');
+        document.getElementById('a2hs-btn').style.display = 'none';
+        localStorage.setItem('a2hs_dismissed', '1');
+    }
+    </script>
+    <style>
+    #a2hs-btn {
+        display: none;
+        background: #ff9800;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 12px 24px;
+        font-size: 18px;
+        margin-bottom: 20px;
+        cursor: pointer;
+    }
+    </style>
+    <button id="a2hs-btn" onclick="addToHomeScreen()">➕ Add to Home Screen</button>
+    """,
+    unsafe_allow_html=True,
+)
+
 # ----------------- Page Setup -----------------
 st.set_page_config(page_title="About & Guide", layout="wide")
 
@@ -29,7 +70,7 @@ st.markdown(
 ---
 ### 🧭 How to use:
 - Use the **sidebar** to navigate between tools.
-- Each tools provides a simple interface for inputting your data and getting instant results.
+- Each page provides a simple interface for inputting your data and getting instant results.
 - Links above will take you directly to the respective tool.
 
 --- 
@@ -84,5 +125,4 @@ if submit:
         else:
             st.error(f"❌ Failed to send message. Error code: {response.status_code}")
     else:
-
         st.warning("⚠️ Please fill in all fields before sending.")
