@@ -7,7 +7,7 @@ st.set_page_config(page_title="RF Pad Arc Length Calculator", layout="wide")
 
 # ---------------- Humor bank ----------------
 success_jokes = [
-    "📏 Arc calculated! Even geometry teachers would be proud.",
+    "◔ Arc calculated! Even geometry teachers would be proud.",
     "✅ Numbers done! That RF pad won’t escape you.",
     "⚙️ Arc length ready – now your shell feels complete.",
     "📐 Coil arcs and math sparks – calculation successful!"
@@ -37,7 +37,7 @@ if "arc_length_detailed_history" not in st.session_state:
 col_left, col_right = st.columns([3, 1])
 
 with col_left:
-    st.title("🌀 Arc Length Calculator")
+    st.title("◔ Arc Length Calculator")
 
 with col_right:
     st.image("images/Circle_arc.svg", use_container_width=True)
@@ -68,7 +68,7 @@ if calc_btn:
         arc_length = calculate_arc_length(diameter_val, angle_val)
 
         # Show results
-        st.subheader("📊 Arc Length Result")
+        st.subheader("◔ Arc Length Result")
         st.write(
             f"**Arc Length of RF pad for {angle_val:.2f}° on {diameter_val:.2f} mm shell = {arc_length:.2f} mm**"
         )
@@ -94,4 +94,5 @@ if calc_btn:
 if st.session_state.arc_length_detailed_history:
     st.subheader("📜 Detailed Arc Length History")
     hist_df = pd.DataFrame(st.session_state.arc_length_detailed_history)
+
     st.dataframe(hist_df, use_container_width=True)
