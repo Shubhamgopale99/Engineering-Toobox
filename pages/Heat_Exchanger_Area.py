@@ -21,7 +21,7 @@ humor_error = [
 # -------------------- Streamlit UI --------------------
 st.set_page_config(page_title="Tube Heat Transfer Area Calculator", layout="wide")
 
-st.title("🔧 Tube Heat Transfer Area Calculator")
+st.title("🔄 Tube Heat Transfer Area Calculator")
 
 # -------------------- Session State --------------------
 if "heat_exchanger_area_history" not in st.session_state:
@@ -66,7 +66,7 @@ if calculate_btn:
             result = (math.pi * tube_dia_mm * tube_length_m * no_of_tubes) / 1000
 
             st.success(
-                f"✅ Heat Transfer Area = **{result:.3f} m²**\n\n"
+                f"🔄 Heat Transfer Area = **{result:.3f} m²**\n\n"
                 + random.choice(humor_success)
             )
 
@@ -93,3 +93,4 @@ if st.session_state.heat_exchanger_area_detailed_history:
 if st.session_state.heat_exchanger_area_history:
     st.subheader("📜 Quick Heat Exchanger Area History")
     st.write(st.session_state.heat_exchanger_area_history)
+
