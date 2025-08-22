@@ -8,15 +8,6 @@ st.set_page_config(page_title="Limpet Coil Calculator", layout="centered")
 st.title("🐍 Limpet Coil Length, Weight & Heat Transfer Area Calculator")
 st.markdown("Get your coil numbers right... and your smile brighter 😄")
 
-# ---------------- Layout with image ----------------
-col_left, col_right = st.columns([3, 1])
-
-with col_left:
-    st.title("🌀 Arc Length of RF Pad Calculator")
-
-with col_right:
-    st.image("images/Circle_arc.svg", use_container_width=True)
-
 # ---------------- Session State ----------------
 if "limpet_coil_history" not in st.session_state:
     st.session_state.limpet_coil_history = []   # quick list (Heat Transfer Area only)
@@ -112,3 +103,4 @@ if st.session_state.limpet_coil_detailed_history:
 if st.session_state.limpet_coil_history:
     st.subheader("📜 Quick Heat Transfer Area History")
     st.write(st.session_state.limpet_coil_history)
+
