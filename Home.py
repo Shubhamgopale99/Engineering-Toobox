@@ -43,7 +43,11 @@ st.markdown(
 )
 
 # ----------------- Page Setup -----------------
-st.set_page_config(page_title="About & Guide", layout="wide")
+st.set_page_config(
+    page_title="About & Guide",
+    layout="wide",
+    page_icon="https://i.postimg.cc/YCSYFC2M/S-Logo-removebg-preview.png"  # Change this URL to your preferred logo
+)
 
 st.title("🛠️ Engineering Toolbox - User Guide")
 
