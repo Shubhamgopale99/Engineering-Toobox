@@ -78,7 +78,7 @@ with st.form("ug27_form"):
     T = st.text_input("Design Temperature (°C)", key="T")
     mat = st.text_input("Material", key="Material")
     rho = st.text_input("Density (kg/m³)", key="Density")
-    S = st.text_input("Allowable Stress S (MPa) (From ASME Sec II-D)", key="S")
+    S = st.text_input("Allowable Stress S (MPa) (From ASME BPVC 2021 Sec II-Part D)", key="S")
     Do = st.text_input("Outside Diameter Do (mm)", key="Do")
     L = st.text_input("Tangent-to-Tangent Length L (mm)", key="L")
     t = st.text_input("Nominal Wall Thickness t (mm)", key="t")
@@ -133,3 +133,4 @@ if st.session_state.ug27_history:
     st.write("### 📜 History (until tab close)")
     df = pd.DataFrame(st.session_state.ug27_history)
     st.dataframe(df)
+
