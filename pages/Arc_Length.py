@@ -70,7 +70,7 @@ if calc_btn:
         # Show results
         st.subheader("◔ Arc Length Result")
         st.write(
-            f"**Arc Length of RF pad for {angle_val:.2f}° on {diameter_val:.2f} mm shell = {arc_length:.2f} mm**"
+            f"**Arc Length for {angle_val:.2f}° on {diameter_val:.2f} mm = {arc_length:.2f} mm**"
         )
 
         # Save to detailed history
@@ -96,3 +96,4 @@ if st.session_state.arc_length_detailed_history:
     hist_df = pd.DataFrame(st.session_state.arc_length_detailed_history)
 
     st.dataframe(hist_df, use_container_width=True)
+
