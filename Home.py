@@ -1,6 +1,32 @@
 import streamlit as st
 import requests
 
+# ----------------- Page Setup -----------------
+st.set_page_config(
+    page_title="About Engineering Tool-Box",
+    layout="wide",
+    page_icon="https://i.postimg.cc/YCSYFC2M/S-Logo-removebg-preview.png",  # Change this URL to your preferred logo
+    initial_sidebar_state="expanded"  # Always expanded
+)
+
+# --- Force Sidebar Non-Collapsible (Hide Collapse Button) ---
+st.markdown(
+    """
+    <style>
+    /* Hide the collapse/expand sidebar button */
+    [data-testid="collapsedControl"] {
+        display: none !important;
+    }
+    /* Ensure sidebar stays visible */
+    section[data-testid="stSidebar"] {
+        visibility: visible !important;
+        transform: none !important;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 # --- Add to Home Screen Button for Android Chrome Users ---
 st.markdown(
     """
@@ -42,13 +68,6 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# ----------------- Page Setup -----------------
-st.set_page_config(
-    page_title="About Engineering Tool-Box",
-    layout="wide",
-    page_icon="https://i.postimg.cc/YCSYFC2M/S-Logo-removebg-preview.png"  # Change this URL to your preferred logo
-)
-
 st.title("🛠️ Engineering Toolbox - User Guide")
 
 st.markdown(
@@ -68,7 +87,6 @@ st.page_link("pages/Shell_Thk_Calculation.py", label="ASME UG-27 shell thickness
 
 
 # The following block is not essential for the core functionality of your app.
-# It only provides user guidance and information.
 st.markdown(
     """
 ---
@@ -87,9 +105,7 @@ You can always reach out for support, suggestions, or collaboration.
     """
 )
 
-
 # --- In-app navigation links ---
-
 st.markdown(
     """
     <div style="display: flex; gap: 30px; font-size: 22px; justify-content: flex-start;">
@@ -106,6 +122,7 @@ st.markdown(
     """,
     unsafe_allow_html=True,
 )
+
 st.write("---")
 st.subheader("📩 Send me a message")
 with st.form("contact_form", clear_on_submit=True):
@@ -113,6 +130,7 @@ with st.form("contact_form", clear_on_submit=True):
     email = st.text_input("Email Address")
     message = st.text_area("Your Message(Please suggest your thoughts)")
     submit = st.form_submit_button("Send 📨")
+
 if submit:
     if full_name and email and message:
         formspree_url = "https://formspree.io/f/movlzpvz"
@@ -130,4 +148,3 @@ if submit:
             st.error(f"❌ Failed to send message. Error code: {response.status_code}")
     else:
         st.warning("⚠️ Please fill in all fields before sending.")
-
